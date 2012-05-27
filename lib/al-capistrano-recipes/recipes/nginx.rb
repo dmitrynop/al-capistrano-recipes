@@ -21,7 +21,7 @@ Capistrano::Configuration.instance.load do
   namespace :nginx do
     desc "|capistrano-recipes| Parses and uploads nginx configuration for this app."
     task :setup, :roles => :app , :except => { :no_release => true } do
-      generate_config(nginx_local_config, nginx_remote_config)
+      generate_config(nginx_local_config, nginx_remote_config,true)
       # create symbolic link on ubuntu
       sudo <<-CMD
         ln -s -f "#{nginx_remote_config}" "#{nginx_site_symlink_sites_enabled}"

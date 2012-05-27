@@ -71,11 +71,12 @@ end
 # Generates a configuration file parsing through ERB
 # Fetches local file and uploads it to remote_file
 # Make sure your user has the right permissions.
-def generate_config(local_file,remote_file)
+def generate_config(local_file,remote_file,use_sudo=false)
   temp_file = '/tmp/' + File.basename(local_file)
   buffer    = parse_config(local_file)
   File.open(temp_file, 'w+') { |f| f << buffer }
-  upload temp_file, remote_file, :via => :scp
+  upload temp_file, temp_file, :via => :scp
+  run "#{use_sudo ? sudo : ""} mv #{temp_file} #{remote_file}"
   `rm #{temp_file}`
 end
 

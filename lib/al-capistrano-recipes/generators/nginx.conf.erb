@@ -21,8 +21,10 @@
 
         # path for static files
         root <%= deploy_to %>/current/public;
-        access_log /var/log/nginx/<%= application %>/<%= rails_env %>.access.log;
-        error_log  /var/log/nginx/<%= application %>/<%= rails_env %>.error.log info;
+        #access_log /var/log/nginx/<%= application %>/<%= rails_env %>.access.log;
+        #error_log  /var/log/nginx/<%= application %>/<%= rails_env %>.error.log info;
+        access_log <%= deploy_to %>/current/log/nginx.access.log;
+        error_log  <%= deploy_to %>/current/log/nginx.error.log info;
 
         # this rewrites all the requests to the maintenance.html
         # page if it exists in the doc root. This is for capistrano's
