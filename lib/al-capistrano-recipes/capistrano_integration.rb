@@ -43,11 +43,11 @@ end
 
 # Path to where the generators live
 def templates_path
-  expanded_path_for('../generators')
+  expanded_path_for('generators')
 end
 
 def docs_path
-  expanded_path_for('../doc')
+  expanded_path_for('doc')
 end
 
 def expanded_path_for(path)
