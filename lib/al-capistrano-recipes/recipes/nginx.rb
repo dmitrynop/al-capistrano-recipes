@@ -23,7 +23,7 @@ Capistrano::Configuration.instance.load do
     task :setup, :roles => :app , :except => { :no_release => true } do
       generate_config(nginx_local_config, nginx_remote_config)
       # create symbolic link on ubuntu
-      sudo run <<-CMD
+      sudo <<-CMD
         ln -s -f "#{nginx_remote_config}" "#{nginx_site_symlink_sites_enabled}"
       CMD
     end

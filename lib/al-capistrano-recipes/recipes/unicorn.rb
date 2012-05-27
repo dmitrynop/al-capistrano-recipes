@@ -79,7 +79,7 @@ Capistrano::Configuration.instance.load do
       commands << "chown #{user}:#{group} #{sockets_path} -R"
       commands << "chmod +rw #{sockets_path}"
       
-      sudo run commands.join(" && ")
+      sudo commands.join(" && ")
       generate_config(unicorn_local_config,unicorn_remote_config)
     end
   end
