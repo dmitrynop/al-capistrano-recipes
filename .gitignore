@@ -28,7 +28,6 @@ Thumbs.db
 _yardoc
 auto-save-list
 coverage
-doc/
 lib/bundler/man
 pkg
 pkg/*
