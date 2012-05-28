@@ -99,7 +99,7 @@
 
     <% if (is_using('unicorn',:app_server) || is_using('puma',:app_server))%>
     upstream <%= application %>_<%= rails_env %>_app_ssl {
-      server unix:<%= File.join(sockets_path,"#{app_server}_ssl.sock") %> fail_timeout=0;
+      server unix:<%= File.join(sockets_path,"#{app_server}.sock") %> fail_timeout=0;
     }
     <% end %>
 
