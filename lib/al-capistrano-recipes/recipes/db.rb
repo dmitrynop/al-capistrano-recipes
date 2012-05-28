@@ -1,6 +1,12 @@
 require 'erb'
 
 Capistrano::Configuration.instance.load do
+
+  #set :nginx_sites_enabled_path, "/etc/nginx/sites-enabled" unless exists?(:nginx_sites_enabled_path)
+  set :db_name, "#{application}_p"
+  set :db_pass, (0...8).map{65.+(rand(25)).chr}.join
+  set :db_user, "#{application}_p"
+
   namespace :db do
     namespace :mysql do
       desc <<-EOF
@@ -46,6 +52,23 @@ Capistrano::Configuration.instance.load do
             channel.send_data "#{pass}\n" 
           end
         end
+        db_config = ERB.new <<-EOF
+        base: &base
+          adapter: mysql2
+          encoding: utf8
+          username: #{db_user}
+          password: #{db_pass}
+
+        #{environment}:
+          database: #{db_name}
+          <<: *base
+
+        test:
+          database: #{application}_test
+          <<: *base
+        EOF
+
+        put db_config.result, "#{shared_path}/config/database.yml"
       end
       
       # Sets database variables from remote database.yaml
@@ -72,9 +95,8 @@ Capistrano::Configuration.instance.load do
     
     desc "|capistrano-recipes| Create database.yml in shared path with settings for current stage and test env"
     task :create_yaml do      
-      set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
-      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
-      
+      #set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
+      #set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
       db_config = ERB.new <<-EOF
       base: &base
         adapter: mysql2
@@ -83,7 +105,7 @@ Capistrano::Configuration.instance.load do
         password: #{db_pass}
 
       #{environment}:
-        database: #{application}_#{environment}
+        database: #{db_name}
         <<: *base
 
       test:
@@ -96,10 +118,12 @@ Capistrano::Configuration.instance.load do
   end
     
   def prepare_for_db_command
-    set :db_name, "#{application}_#{environment}"
+
     set(:db_admin_user) { Capistrano::CLI.ui.ask "Username with priviledged database access (to create db):" }
-    set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
-    set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
+    #set(:db_user) { Capistrano::CLI.ui.ask "Enter #{environment} database username:" }
+
+    #set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{environment} database password:" }
+
   end
   
   desc "Populates the database with seed data"
