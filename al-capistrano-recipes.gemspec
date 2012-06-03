@@ -18,5 +18,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake'
 
   gem.add_dependency "capistrano", ">= 2.5.9"
-  gem.add_dependency "capistrano-ext", ">= 1.2.1"
+  #gem.add_dependency "capistrano-ext", ">= 1.2.1"
 end
+
