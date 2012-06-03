@@ -1,2 +1,3 @@
-require 'bundler'
-require 'bundler/gem_tasks'
+#!/usr/bin/env rake
+require "bundler/gem_tasks"
+

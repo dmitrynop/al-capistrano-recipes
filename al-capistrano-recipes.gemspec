@@ -15,9 +15,9 @@ Gem::Specification.new do |gem|
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{|f| File.basename(f)}
   gem.require_paths = ['lib']
 
-  gem.add_development_dependency 'rake'
+  #gem.add_development_dependency 'rake'
 
-  gem.add_dependency "capistrano", ">= 2.5.9"
+  gem.add_dependency "capistrano", ">= 2.12.0"
   #gem.add_dependency "capistrano-ext", ">= 1.2.1"
 end
 
