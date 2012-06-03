@@ -1,6 +1,7 @@
 require 'capistrano'
 require 'capistrano/version'
 require 'capistrano/cli'
+
 #require '../../lib/al-capistrano-recipes/helpers'
 
 # =========================================================================
@@ -9,10 +10,10 @@ require 'capistrano/cli'
 
 # automatically sets the environment based on presence of
 # :stage (multistage gem), :rails_env, or RAILS_ENV variable; otherwise defaults to 'production'
-module AlCapistranoRecipes
-  class CapistranoIntegration
-def self.load_into(capistrano_config)
-      capistrano_config.load do
+#module AlCapistranoRecipes
+ # class CapistranoIntegration
+#def self.load_into(capistrano_config)
+ #     capistrano_config.load do
 
 def environment
   if exists?(:stage)
@@ -94,15 +95,15 @@ def run_rake(task)
 end
 
 
+#Dir[File.join(File.dirname(__FILE__), '/ruby/*.rb')].sort.each { |lib| load lib }
 
+#  end
+#end
+#end
+#end
 
+#if Capistrano::Configuration.instance
+#  AlCapistranoRecipes::CapistranoIntegration.load_into(Capistrano::Configuration.instance)
+#end
 Dir[File.join(File.dirname(__FILE__), '/recipes/*.rb')].sort.each { |f| load f }
-  end
-end
-end
-end
-
-if Capistrano::Configuration.instance
-  AlCapistranoRecipes::CapistranoIntegration.load_into(Capistrano::Configuration.instance)
-end
 
