@@ -86,6 +86,54 @@ def generate_config(local_file,remote_file,use_sudo=false)
   `rm #{temp_file}`
 end
 
+#==========================================================================
+
+
+#==========================================================================
+
+  def apt_install(packages)
+    packages = packages.split(/\s+/) if packages.respond_to?(:split)
+    packages = Array(packages)
+    sudo "#{apt_get} -qyu --force-yes install #{packages.join(" ")}"
+  end
+
+  # utilities.apt_reinstall %w[package1 package2]
+  # utilities.apt_reinstall "package1 package2"
+  def apt_reinstall(packages)
+    packages = packages.split(/\s+/) if packages.respond_to?(:split)
+    packages = Array(packages)
+    sudo "#{apt_get} -qyu --force-yes --reinstall install #{packages.join(" ")}"
+  end
+
+  def apt_remove(packages)
+    packages = packages.split(/\s+/) if packages.respond_to?(:split)
+    packages = Array(packages)
+    sudo "#{apt_get} -qyu --force-yes remove #{packages.join(" ")}"
+  end
+
+  def apt_autoremove
+    sudo "#{apt_get} -qy autoremove"
+  end
+
+  def apt_update
+    sudo "#{apt_get} -qy update"
+  end
+
+  def apt_upgrade
+    sudo_with_input "dpkg --configure -a", /\?/, "\n" #recover from failed dpkg
+    sudo "#{apt_get} -qy update"
+    sudo_with_input "#{apt_get} -qyu --force-yes upgrade", /\?/, "\n" #answer the default if any package pops up a warning
+  end
+
+  def apt_get
+    "DEBCONF_TERSE='yes' DEBIAN_PRIORITY='critical' DEBIAN_FRONTEND=noninteractive apt-get"
+  end
+
+
+
+
+
+
 # =========================================================================
 # Executes a basic rake task.
 # Example: run_rake log:clear

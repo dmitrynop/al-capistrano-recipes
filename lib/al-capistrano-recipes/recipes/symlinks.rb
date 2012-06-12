@@ -1,11 +1,13 @@
 Capistrano::Configuration.instance.load do
   # These are set to the same structure in shared <=> current
   set :normal_symlinks, %w(log config/database.yml) unless exists?(:normal_symlinks)
-  
+
   # Weird symlinks go somewhere else. Weird.
   set :weird_symlinks, { 'bundle'  => 'vendor/bundle',
                          'pids'    => 'tmp/pids',
-                         'sockets' => 'tmp/sockets' } unless exists?(:weird_symlinks)
+                         'sockets' => 'tmp/sockets',
+                         'spree' => 'public/spree',
+                         'assets' => 'public/assets' } unless exists?(:weird_symlinks)
 
   namespace :symlinks do
     desc "|capistrano-recipes| Make all the symlinks in a single run"
@@ -26,3 +28,4 @@ Capistrano::Configuration.instance.load do
     end
   end
 end
+
