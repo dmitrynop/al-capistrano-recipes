@@ -10,7 +10,7 @@ Capistrano::Configuration.instance.load do
                          'assets' => 'public/assets' } unless exists?(:weird_symlinks)
 
   namespace :symlinks do
-    desc "|capistrano-recipes| Make all the symlinks in a single run"
+    desc "|al capistrano-recipes| Make all the symlinks in a single run"
     task :make, :roles => :app, :except => { :no_release => true } do
       commands = normal_symlinks.map do |path|
         "rm -rf #{latest_release}/#{path} && \
