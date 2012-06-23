@@ -57,6 +57,8 @@
             rewrite (.*) $1/index.html break;
           }
 
+
+
           # this is the meat of the rails page caching config
           # it adds .html to the end of the url and then checks
           # the filesystem for that file. If it exists, then we
@@ -68,6 +70,24 @@
             rewrite (.*) $1.html break;
           }
 
+	location ~ ^/(flash|pdf|images|javascripts|stylesheets|compiled|fonts|attachments)/ {
+	   expires      180d;
+	  access_log    off;
+	}
+	            
+	 # Rails 3 asset pipeline
+	location ~ ^/assets/ {
+	expires 1y;
+	add_header Cache-Control public;
+	                        
+	                            # Some browsers still send conditional-GET requests if there's a
+	                                # Last-Modified header or an ETag header even if they haven't
+	                                    # reached the expiry date sent in the Expires header.
+	add_header Last-Modified "";
+	add_header ETag "";
+	break;
+	}
+
           <% if (is_using('unicorn',:app_server) || is_using('puma',:app_server))%>
           if (!-f $request_filename) {
             proxy_pass http://<%= application %>_<%= rails_env %>_app_server;
@@ -76,17 +96,7 @@
           <% end %>
         }
 
-        # Now this supposedly should work as it gets the filenames with querystrings that Rails provides.
-        # BUT there's a chance it could break the ajax calls.
-        location ~* \.(ico|css|gif|jpe?g|png)(\?[0-9]+)?$ {
-        	 expires max;
-        	 break;
-        }
 
-        location ~ ^/javascripts/.*\.js(\?[0-9]+)?$ {
-        	 expires max;
-        	 break;
-        }
 
         # Rails error pages
         error_page 500 502 503 504 /500.html;
